@@ -4,12 +4,22 @@ const readStream = fs.createReadStream('./file.txt', 'utf-8')
 
 readStream.on('data', (chunk) => {
     const endpoints = chunk.split('\r\n')
-    extractCommonWord(endpoints)
+    console.log(commonWord(endpoints))
 })
 
-const extractCommonWord = (lines) => {
-    console.log({lines})
-    lines.forEach(element => {
-        console.log(element)
-    });
+const commonWord = (lines) => {
+    let result = []
+    lines.forEach(line => {
+        let splittedLine = line.split('/')
+        splittedLine.forEach(chunk => {
+            if(chunk.includes('get') || chunk.includes('update') || chunk.includes('delete') || chunk.includes('fetch')){
+                chunk = chunk.replace("get", "")
+                chunk = chunk.replace("update", "")
+                chunk = chunk.replace("delete", "")
+                chunk = chunk.replace("fetch", "")
+                result.push(chunk)
+            }
+        })
+    })
+    return result
 }
