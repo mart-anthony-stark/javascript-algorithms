@@ -36,6 +36,7 @@ const convertEndpoints = file => {
         filteredData = lines.filter(line => line.includes(commonWord))
         console.log({filteredData})
         
+        // Create array of objects with endpoint and request method fields
         const jsonContent = filteredData.map(data => {
             const method = data.includes('get') || data.includes('fetch') ? 'GET' : (data.includes('update') ? 'PUT' : (data.includes('delete') ? 'DELETE' : 'POST'))
             return {
