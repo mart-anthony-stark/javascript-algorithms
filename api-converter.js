@@ -17,18 +17,23 @@ const convertEndpoints = file => {
         let result = []
         lines.forEach(line => {
             let splittedLine = line.split('/')
-            splittedLine.forEach(chunk => {
-                if(chunk.includes('get') || chunk.includes('update') || chunk.includes('delete') || chunk.includes('fetch')){
-                    chunk = chunk.replace("get", "")
-                    chunk = chunk.replace("update", "")
-                    chunk = chunk.replace("delete", "")
-                    chunk = chunk.replace("fetch", "")
-                    if(!result.includes(chunk))
-                        result.push(chunk)
+            splittedLine.forEach(word => {
+                if(word.includes('get') || word.includes('update') || word.includes('delete') || word.includes('fetch')){
+                    word = word.replace("get", "")
+                    word = word.replace("update", "")
+                    word = word.replace("delete", "")
+                    word = word.replace("fetch", "")
+                    result.push(word)
                 }
             })
         })
-        return result[0]
+        console.log(result)
+        if(result.length === 1) return result[0]
+        
+        return result.sort((a,b) =>
+                result.filter(v => v===a).length
+            - result.filter(v => v===b).length
+        ).pop();
     }
 
     // Filters data that includes the common word
