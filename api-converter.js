@@ -7,6 +7,8 @@ const convertEndpoints = file => {
     readStream.on('data', (chunk) => {
         const data = chunk.split('\r\n')
         const commonWord = getCommonWord(data)
+        console.log({data})
+        console.log({commonWord})
         filterLines(data, commonWord)
     })
 
@@ -32,8 +34,21 @@ const convertEndpoints = file => {
     // Filters data that includes the common word
     const filterLines = (lines, commonWord) => {
         filteredData = lines.filter(line => line.includes(commonWord))
+        console.log({filteredData})
         
+        const jsonContent = filteredData.map(data => {
+            const method = data.includes('get') || data.includes('fetch') ? 'GET' : (data.includes('update') ? 'PUT' : (data.includes('delete') ? 'DELETE' : 'POST'))
+            return {
+                endpoint: data.split(' = ')[1],
+                method
+            }
+        })
+
+        fs.writeFile('filteredEndpoints.json', JSON.stringify(jsonContent), (e)=>{
+            if(e) console.log(e)
+            else console.log('JSON File created Successfully')
+        })
     }
 }
 
-convertEndpoints('./file.txt')
+convertEndpoints('./dummy.properties')
